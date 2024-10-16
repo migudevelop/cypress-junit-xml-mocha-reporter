@@ -17,13 +17,13 @@ declare namespace Cypress {
     /**
      * Configuration for jira ids
      */
-    jiraIds?: JiraIdsConfigOptions | JiraIdsConfigOptions[]
+    jiraIds?: JiraIdsConfigOptions[]
   }
 
   interface SuiteConfigOverrides {
     /**
      * Configuration for jira ids
      */
-    jiraIds?: JiraIdsConfigOptions | JiraIdsConfigOptions[]
+    jiraIds?: JiraIdsConfigOptions[]
   }
 }

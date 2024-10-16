@@ -81,7 +81,9 @@ class FileManager {
       rootSuite._attr.skipped = stats.pending
     }
     testsuites = [rootSuite].concat(testsuites)
-
+    Logger.info(
+      `Content of test suites prior to conversion to xml: ${JSON.stringify(testsuites, null, 2)}`
+    )
     return xml({ testsuites: testsuites }, { declaration: true, indent: '  ' })
   }
 
@@ -109,6 +111,7 @@ class FileManager {
    */
   readAndCreateXmlFile(testsuites) {
     const xmlContent = this.getXml(testsuites)
+    Logger.info(`XML content: ${xmlContent}`)
 
     const reportFilename = this._getReportFilename(xmlContent, testsuites)
 

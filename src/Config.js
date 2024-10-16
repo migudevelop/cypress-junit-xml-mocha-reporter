@@ -17,7 +17,6 @@ class Config {
       'MOCHA_FILE',
       'results.xml'
     )
-    this._options.jiraId = this._getSetting(options.jiraId, 'JIRA_ID', null)
     this._options.rootSuiteTitle = this._getSetting(
       options.rootSuiteTitle,
       'ROOT_SUITE_TITLE',

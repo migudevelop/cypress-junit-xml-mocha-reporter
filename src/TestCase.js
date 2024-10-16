@@ -7,6 +7,7 @@ const { reporters } = require('mocha')
 const xmlSanitizer = require('xml-sanitizer')
 
 const JiraIdsManager = require('./JiraIdsManager')
+const Logger = require('./Logger')
 const { Base } = reporters
 
 class TestCase {
@@ -63,7 +64,9 @@ class TestCase {
     }
 
     this._checkFailure(testcase, err)
-
+    Logger.info(
+      `${name} test case cotent: ${JSON.stringify(testcase, null, 2)}`
+    )
     return testcase
   }
 
@@ -82,6 +85,9 @@ class TestCase {
         message,
         failureMessage
       )
+      Logger.error(`test case error: ${err}`)
+      Logger.error(`test case error message: ${message}`)
+      Logger.error(`test case failure message: ${failureMessage}`)
 
       testcase.map((data) => data.testcase.push({ failure: failureElement }))
     }

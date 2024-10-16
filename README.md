@@ -3,7 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/v/release/migudevelop/cypress-junit-xml-mocha-reporter)
 ![GitHub License](https://img.shields.io/github/license/migudevelop/cypress-junit-xml-mocha-reporter)
 
-This mocha reporter produces JUnit-style XML test results and allows you to split the same test into different test cases by jira id.
+This is a cypress reporter that produces JUnit style XML test results and allows to split the same test in different test cases by jira id, this improves performance and avoids reloading the page in each test if we want to group different tests in the same test case.
 
 ## Table of Contents
 
@@ -60,27 +60,40 @@ const mocha = new Mocha({
 
 ### Split the same test case by id of jira
 
-You can also add the jira key in the `reporterOptions` or in environment variables to split the same test into different test cases. This is useful if you want to test different tests in the same test in Cypress without affecting performance. If you want provided more than one jira id you should divide the ids with the `,` separator. e.g: `title one JIRA.KEY.1,JIRA.KEY.2,JIRA.KEY.3`
->[!IMPORTANT]
-> You shoult put the jira ids in the end of the title. e.g: `title one JIRA.KEY.1,JIRA.KEY.2,JIRA.KEY.3`.
-
-To do this, enter them using the environment variable:
-```shell
-PROPERTIES=JIRA.KEY mocha test --reporter cypress-junit-xml-mocha-reporter
-```
-or
-```javascript
-const mocha = new Mocha({
-    reporter: 'cypress-junit-xml-mocha-reporter',
-    reporterOptions: {
-        jiraId: 'JIRA.KEY'
+You can add jira keys in the `testConfig` options of a test case to split the same test into different test cases. These keys should be provided in an array of objects, e.g:
+```js
+  it(
+    "testcase",
+    {
+      jiraIds: [
+        { id: "JIRA.KEY.1" },
+        { id: "JIRA.KEY.2" },
+        { id: "JIRA.KEY.3" },
+      ],
+    },
+    () => {
+      expect(2).to.be.greaterThan(1);
     }
-})
+  );
 ```
+
+This is useful if you want to test different tests on the same test in Cypress without affecting performance. If you want to provide a different title to the test case you can add the `testTitle` property to each of the keys in the test case.
+>[!IMPORTANT]
+> If the `testTitle` property is not provided, the title will be the title of the test case.
+
 If the test case it's this:
 ```js
 describe("test", () => {
-  it("testcase JIRA.KEY.1,JIRA.KEY.2,JIRA.KEY.3", () => {
+  it(
+    "testcase",
+    {
+      jiraIds: [
+        { id: "JIRA.KEY.1", testTitle: "should display test 1" },
+        { id: "JIRA.KEY.2", testTitle: "should display test 2" },
+        { id: "JIRA.KEY.3" },
+      ],
+    },
+    () => {
       expect(2).to.be.greaterThan(1);
     }
   );
@@ -91,11 +104,11 @@ the result it's this:
 ```xml
 <testsuites>
   <testsuite>
-    <testcase name="test testcase JIRA.KEY.1" time="0.022" classname="test test JIRA.KEY.1">
+    <testcase name="should display test 1 JIRA.KEY.1" time="0.034" classname="should display test 1 JIRA.KEY.1">
     </testcase>
-    <testcase name="test testcase JIRA.KEY.2" time="0.022" classname="test test JIRA.KEY.2">
+    <testcase name="should display test 2 JIRA.KEY.2" time="0.034" classname="should display test 2 JIRA.KEY.2">
     </testcase>
-    <testcase name="test testcase JIRA.KEY.3" time="0.022" classname="test test JIRA.KEY.3">
+    <testcase name="test testcase JIRA.KEY.3" time="0.034" classname="testcase JIRA.KEY.3">
     </testcase>
   </testsuite>
 </testsuites>
@@ -163,7 +176,6 @@ You can also configure the `testsuites.name` attribute by setting `reporterOptio
 | Parameter                      | Default                | Effect                                                                                                                  |
 | ------------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | mochaFile                      | `results.xml`     | Configures the file to write reports to                                                                                 |
-| jiraId                     | `null`                 | A key to check if testcaase titles contain jira ids with the key provided.                                                              |
 | properties                     | `null`                 | A hash of additional properties to add to each test suite                                                               |
 | rootSuiteTitle                 | `Root Suite`           | The name for the root suite. (defaults to 'Root Suite')                                                                 |
 | testSuitesTitle                | `Mocha Tests`          | The name for the `testsuites` tag (defaults to 'Mocha Tests')                                                           |

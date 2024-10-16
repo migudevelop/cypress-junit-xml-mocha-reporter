@@ -49,29 +49,6 @@ function createTestData({ runner }, callback, options = {}) {
   })
 }
 
-function createJiraIdsTestData({ runner }, callback, options = {}) {
-  options.title = options.title || 'Suite 1'
-  const jiraId = options.jiraId
-
-  const { suite } = runner
-  const rootSuite = suite
-
-  const suite1 = Suite.create(rootSuite, options.title)
-  suite1.addTest(
-    createTest(
-      `Lorem Ipsum is simply dummy text of the printing and typesetting industry. ${jiraId}1, ${jiraId}2`
-    )
-  )
-
-  runner.run(function (failureCount) {
-    if (runner.dispose) {
-      runner.dispose()
-    }
-
-    callback(failureCount)
-  })
-}
-
 function createTest(name, callback = () => {}) {
   return new Test(name, callback)
 }
@@ -80,6 +57,5 @@ module.exports = {
   verifyMochaFile,
   createReporter,
   createTestData,
-  createJiraIdsTestData,
   createTest
 }

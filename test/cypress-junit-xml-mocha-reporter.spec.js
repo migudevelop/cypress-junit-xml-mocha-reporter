@@ -4,7 +4,6 @@ const chaiXML = require('chai-xml')
 const { dirname, join } = require('path')
 
 const {
-  createJiraIdsTestData,
   createReporter,
   createTestData,
   verifyMochaFile
@@ -32,22 +31,6 @@ describe('cypress-junit-xml-mocha-reporter', function () {
       verifyMochaFile(filePath)
       done()
     })
-  })
-
-  it('should create a JUnit XML report with jira ids as a test cases', function (done) {
-    const jiraId = 'JIRA_TEST'
-    const { filePath, reporter } = createReporter({
-      mochaFile: `${FILE_OUTPUT_DIR}/jira-files.xml`,
-      jiraId
-    })
-    createJiraIdsTestData(
-      reporter,
-      () => {
-        verifyMochaFile(filePath)
-        done()
-      },
-      { jiraId }
-    )
   })
 
   it('should create a xml file when `process.env.MOCHA_FILE` is provided', function (done) {
