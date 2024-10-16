@@ -1,7 +1,7 @@
 {
   "name": "cypress-junit-xml-mocha-reporter",
-  "version": "1.0.1",
-  "description": "A JUnit XML reporter for mocha.",
+  "version": "1.0.0",
+  "description": "A JUnit XML reporter for cypress and allows you to split the same test into different test cases by jira id.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -40,6 +40,7 @@
     "test",
     "tests",
     "javascript",
+    "typescript",
     "reporter"
   ],
   "license": "MIT",
