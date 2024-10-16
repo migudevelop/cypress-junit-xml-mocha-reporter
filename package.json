@@ -5,9 +5,9 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "lint": "eslint ./**/*.{js,ts}",
+    "lint": "eslint ./**/*.js",
     "tests": "mocha test --reporter=spec",
-    "lint:fix": "eslint --fix ./**/*.{js,ts}",
+    "lint:fix": "eslint --fix ./**/*.js",
     "prettify": "prettier . --write",
     "tsc": "tsc",
     "prettier:check": "prettier . --check"
@@ -68,7 +68,7 @@
     "mocha": ">=3.2.5"
   },
   "lint-staged": {
-    "src/**/*.{js,ts}": [
+    "src/**/*.js": [
       "prettier --write",
       "eslint --fix"
     ]
