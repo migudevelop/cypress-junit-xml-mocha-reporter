@@ -133,7 +133,6 @@ class TestCase {
     }
     // Cypress >6.7
     if (test?._testConfig) {
-      console.log('entra _testConfig')
       return test?._testConfig
     }
     return {}
