@@ -117,7 +117,7 @@ the result it's this:
 ### Adding jira ids to test cases as properties
 
 You can also add the jira ids to the test cases as properties by adding the `jira.useProperties` option of the `reporterOptions` in the `cypress.config.file`, for example:
->[!INFO]
+>[!NOTE]
 > If you need to change the name of the property you can provide another name by adding the `propertiesName` property. By default the name is `jira`.
 ```javascript
 {
