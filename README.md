@@ -114,6 +114,78 @@ the result it's this:
 </testsuites>
 ```
 
+### Adding jira ids to test cases as properties
+
+You can also add the jira ids to the test cases as properties by adding the `jira.useProperties` option of the `reporterOptions` in the `cypress.config.file`, for example:
+>[!INFO]
+> If you need to change the name of the property you can provide another name by adding the `propertiesName` property. By default the name is `jira`.
+```javascript
+{
+    reporter: 'cypress-junit-xml-mocha-reporter',
+    reporterOptions: {
+        jira: {
+          useProperties: true,
+          propertiesName: "foo", // By default it's "jira"
+        },
+    }
+}
+```
+
+the result it's this:
+```xml
+<testsuites>
+  <testsuite>
+    <testcase name="should display test 1 JIRA.KEY.1" time="0.033" classname="should display test 1 JIRA.KEY.1">
+      <properties>
+        <property name="foo" value="JIRA.KEY.1"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>
+```
+
+### Adding a prefix to the jira ids
+
+You can also add a prefix to the jira ids in the `jira.idPrefix` option of the `reporterOptions` in the `cypress.config.file`, for example,
+If you want to add the `JIRA.` prefix in this test case you must add the `idPrefix` option in the config file:
+```javascript
+{
+    reporter: 'cypress-junit-xml-mocha-reporter',
+    reporterOptions: {
+        jira: {
+          idPrefix: "JIRA.",
+        },
+    }
+}
+```
+```js
+describe("test", () => {
+  it(
+    "testcase",
+    {
+      jiraIds: [
+        { id: "KEY.1", testTitle: "should display test 1" },
+        { id: "KEY.2" },
+      ],
+    },
+    () => {
+      expect(2).to.be.greaterThan(1);
+    }
+  );
+});
+```
+
+the result it's this:
+```xml
+<testsuites>
+  <testsuite>
+    <testcase name="should display test 1 JIRA.KEY.1" time="0.034" classname="should display test 1 JIRA.KEY.1">
+    </testcase>
+    <testcase name="should display test 2 JIRA.KEY.2" time="0.034" classname="should display test 2 JIRA.KEY.2">
+    </testcase>
+  </testsuite>
+</testsuites>
+```
 
 ### Append properties to testsuite
 
@@ -176,6 +248,9 @@ You can also configure the `testsuites.name` attribute by setting `reporterOptio
 | Parameter                      | Default                | Effect                                                                                                                  |
 | ------------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | mochaFile                      | `results.xml`     | Configures the file to write reports to                                                                                 |
+| jira.idPrefix                     | `null`                 | Add a prefix on jira ids when jira ids are provided                                                           |
+| jira.useProperties                     | `false`                 | Create a property to set the provided jira ids                                                               |
+| jira.propertiesName                     | `jira`                 | Adding a name to properties when the useProperties property it's enabled                                                     |
 | properties                     | `null`                 | A hash of additional properties to add to each test suite                                                               |
 | rootSuiteTitle                 | `Root Suite`           | The name for the root suite. (defaults to 'Root Suite')                                                                 |
 | testSuitesTitle                | `Mocha Tests`          | The name for the `testsuites` tag (defaults to 'Mocha Tests')                                                           |
