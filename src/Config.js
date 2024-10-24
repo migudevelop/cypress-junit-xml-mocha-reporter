@@ -10,8 +10,8 @@ class Config {
   _options = {}
 
   constructor(optionsData) {
+    Logger.info(`Inital options: ${JSON.stringify(optionsData, null, 2)}`)
     const options = this._getReporterOptions(optionsData)
-    Logger.info(`options: ${JSON.stringify(options, null, 2)}`)
     this._options.mochaFile = this._getSetting(
       options.mochaFile,
       'MOCHA_FILE',
@@ -27,6 +27,29 @@ class Config {
       'TEST_SUITES_TITLE',
       'Mocha Tests'
     )
+    this._options.properties = this._getSetting(
+      options.properties,
+      'PROPERTIES',
+      null,
+      (envValue) => {
+        if (envValue) {
+          return envValue.split(',').reduce((properties, prop) => {
+            var property = prop.split(':')
+            properties[property[0]] = property[1]
+            return properties
+          }, [])
+        }
+
+        return null
+      }
+    )
+    this._options.jira = this._getSetting(
+      options.jira,
+      'JIRA',
+      { idPrefix: null, useProperties: false, propertiesName: 'jira' },
+      (envValue) => JSON.stringify(envValue)
+    )
+    Logger.info(`Parsed options: ${JSON.stringify(optionsData, null, 2)}`)
   }
 
   getConfig() {

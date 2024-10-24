@@ -57,7 +57,8 @@ class TestCase {
               name: jiraId.name,
               duration: test?.duration,
               classname: jiraId.classname
-            })
+            }),
+            ...this._createTestCaseProperties(jiraId.properties)
           ]
         })
       })
@@ -123,6 +124,17 @@ class TestCase {
     }
   }
 
+  _createTestCaseProperties(properties) {
+    if (!isEmptyArray(properties)) {
+      return [
+        {
+          properties
+        }
+      ]
+    }
+    return []
+  }
+
   _getTestConfig(test) {
     // Cypress >9
     if (
@@ -136,6 +148,10 @@ class TestCase {
       return test?._testConfig
     }
     return {}
+  }
+
+  _createProperty({ name = '', value = '' }) {
+    return { _attr: { name, value } }
   }
 }
 

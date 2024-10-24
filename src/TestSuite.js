@@ -61,7 +61,7 @@ class TestSuite {
     if (!props) {
       return []
     }
-    return Object.keys(props).reduce(function (properties, name) {
+    return Object.keys(props).reduce((properties, name) => {
       const value = props[name]
       properties.push({ property: this._createProperty({ name, value }) })
       return properties

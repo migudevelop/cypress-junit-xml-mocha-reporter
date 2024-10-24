@@ -1,7 +1,8 @@
 const {
   isEmptyString,
   ensureArray,
-  isNullish
+  isNullish,
+  ensureString
 } = require('@migudevelop/types-utils')
 
 const Logger = require('./Logger')
@@ -21,12 +22,14 @@ class JiraIdsManager {
 
     return jiraIds.map(({ id, testTitle }) => {
       const title = this._ensureTestTitle(testTitle, name)
+      const jiraId = this._addJiraIdPrefix(id)
       const classNameStr = this._ensureTestTitle(testTitle, classname)
-      const nameWithId = this._formatStringWithId(title, id)
-      const classNameWithId = this._formatStringWithId(classNameStr, id)
+      const nameWithId = this._formatStringWithId(title, jiraId)
+      const classNameWithId = this._formatStringWithId(classNameStr, jiraId)
       return {
         name: nameWithId,
-        classname: classNameWithId
+        classname: classNameWithId,
+        properties: this._createProperty(jiraId)
       }
     })
   }
@@ -37,6 +40,19 @@ class JiraIdsManager {
 
   _formatStringWithId(value, id) {
     return `${value.trim()} ${id.trim()}`
+  }
+
+  _addJiraIdPrefix(id) {
+    const prefix = ensureString(this._options?.jira?.idPrefix)
+    return `${prefix.trim()}${id.trim()}`
+  }
+
+  _createProperty(value = '') {
+    if (this._options?.jira?.useProperties) {
+      const name = this._options?.jira?.propertiesName ?? 'jira'
+      return [{ property: { _attr: { name, value } } }]
+    }
+    return []
   }
 }
 
